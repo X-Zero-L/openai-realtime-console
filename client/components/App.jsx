@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import logo from "/assets/openai-logomark.svg";
 import EventLog from "./EventLog";
 import SessionControls from "./SessionControls";
+import SessionSettings from "./SessionSettings";
 import { motion } from "framer-motion";
 import Auth from "../pages/Auth";
 
@@ -15,10 +16,15 @@ export default function App() {
   const [apiKey, setApiKey] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authError, setAuthError] = useState("");
+  const [sessionSettings, setSessionSettings] = useState({
+    voice: "verse",
+    temperature: 0.8,
+    instructions: "请用友好、热情的语气与用户交流，加入适当的幽默感，营造轻松的对话氛围。"
+  });
   const peerConnection = useRef(null);
   const audioElement = useRef(null);
 
-  // 组件挂载后从 localStorage 获取 apiKey
+  // 组件挂载后从 localStorage 获取 apiKey 和设置
   useEffect(() => {
     if (isBrowser) {
       const savedApiKey = localStorage.getItem("apiKey") || "";
@@ -26,8 +32,26 @@ export default function App() {
         setApiKey(savedApiKey);
         setIsAuthenticated(true);
       }
+      
+      // 尝试从 localStorage 加载会话设置
+      try {
+        const savedSettings = localStorage.getItem("sessionSettings");
+        if (savedSettings) {
+          setSessionSettings(JSON.parse(savedSettings));
+        }
+      } catch (e) {
+        console.error("加载会话设置失败:", e);
+      }
     }
   }, []);
+
+  // 处理会话设置变更
+  const handleSettingsChange = (newSettings) => {
+    setSessionSettings(newSettings);
+    if (isBrowser) {
+      localStorage.setItem("sessionSettings", JSON.stringify(newSettings));
+    }
+  };
 
   // 处理身份验证成功
   const handleAuthenticated = (key) => {
@@ -46,9 +70,12 @@ export default function App() {
     try {
       // 获取 OpenAI Realtime API 的会话令牌
       const tokenResponse = await fetch("/token", {
+        method: "POST",
         headers: {
-          Authorization: `Bearer ${apiKey}`
-        }
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(sessionSettings) // 传递会话设置
       });
       
       if (!tokenResponse.ok) {
@@ -218,7 +245,7 @@ export default function App() {
         initial={{ y: -50 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5, type: "spring", stiffness: 120 }}
-        className="absolute top-0 left-0 right-0 h-16 flex items-center bg-white shadow-sm z-10"
+        className="fixed top-0 left-0 right-0 h-16 flex items-center bg-white shadow-sm z-10"
       >
         <div className="flex items-center justify-between w-full mx-4 pb-2 border-0 border-b border-solid border-gray-200">
           <div className="flex items-center gap-4">
@@ -250,38 +277,39 @@ export default function App() {
           </motion.button>
         </div>
       </motion.nav>
-      <main className="absolute top-16 left-0 right-0 bottom-0 bg-gray-50">
-        <motion.section 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className="absolute top-0 left-0 right-0 bottom-0 flex"
-        >
-          <section className="absolute top-0 left-0 right-0 bottom-32 px-2 md:px-4 py-4 overflow-y-auto">
-            <EventLog events={events} />
-          </section>
-          <section className="absolute h-32 left-0 right-0 bottom-0 p-2 md:p-4 bg-white border-t border-gray-200 shadow-sm">
-            {authError && (
-              <motion.div 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="text-red-500 text-xs md:text-sm mb-2 bg-red-50 p-2 rounded-md border border-red-200"
-              >
-                {authError}
-              </motion.div>
-            )}
-            <SessionControls
-              startSession={startSession}
-              stopSession={stopSession}
-              sendClientEvent={sendClientEvent}
-              sendTextMessage={sendTextMessage}
-              events={events}
-              isSessionActive={isSessionActive}
-              apiKey={apiKey}
-            />
-          </section>
-        </motion.section>
-      </main>
+      
+      <div className="flex flex-col h-screen pt-16">
+        <div className="flex-1 flex flex-col p-3 md:p-6 overflow-hidden">
+          <div className="flex-1 flex flex-col rounded-lg border border-gray-200 shadow-sm bg-white overflow-hidden">
+            <div className="flex-1 overflow-y-auto p-3 md:p-4">
+              <EventLog events={events} />
+            </div>
+            <div className="flex-shrink-0 border-t border-gray-200 p-3 md:p-4">
+              <SessionControls
+                startSession={startSession}
+                stopSession={stopSession}
+                sendClientEvent={sendClientEvent}
+                sendTextMessage={sendTextMessage}
+                serverEvents={events}
+                isSessionActive={isSessionActive}
+                apiKey={apiKey}
+                sessionSettings={sessionSettings}
+                onSettingsChange={handleSettingsChange}
+              />
+            </div>
+          </div>
+          
+          {authError && (
+            <motion.div 
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              className="mt-4 text-red-500 text-xs md:text-sm bg-red-50 p-2 md:p-3 rounded-md border border-red-200"
+            >
+              {authError}
+            </motion.div>
+          )}
+        </div>
+      </div>
     </>
   );
 }

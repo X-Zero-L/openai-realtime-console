@@ -33,6 +33,47 @@ const vite = await createViteServer({
 app.use(vite.middlewares);
 
 // API route for token generation
+app.use(express.json()); // 支持解析JSON请求体
+
+app.post("/token", validateApiKey, async (req, res) => {
+  try {
+    // 从请求体获取会话设置
+    const {
+      voice = "verse",
+      temperature = 0.8,
+      instructions = "",
+      input_audio_format = "pcm16",
+      output_audio_format = "pcm16",
+    } = req.body;
+
+    const response = await fetch(
+      "https://api.openai.com/v1/realtime/sessions",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "gpt-4o-realtime-preview-2024-12-17",
+          voice,
+          temperature,
+          instructions,
+          input_audio_format,
+          output_audio_format,
+        }),
+      },
+    );
+
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error("Token generation error:", error);
+    res.status(500).json({ error: "Failed to generate token" });
+  }
+});
+
+// 保留原来的GET方法以保持兼容性
 app.get("/token", validateApiKey, async (req, res) => {
   try {
     const response = await fetch(
@@ -56,6 +97,12 @@ app.get("/token", validateApiKey, async (req, res) => {
     console.error("Token generation error:", error);
     res.status(500).json({ error: "Failed to generate token" });
   }
+});
+
+// API route for just verifying the API key
+app.get("/verify", validateApiKey, (req, res) => {
+  // 如果validateApiKey中间件通过，直接返回成功
+  res.json({ success: true, message: "API密钥验证成功" });
 });
 
 // Render the React client

@@ -38,7 +38,7 @@ export default function Auth({ onAuthenticated }) {
     setError("");
     
     try {
-      const response = await fetch("/token", {
+      const response = await fetch("/verify", {
         headers: {
           Authorization: `Bearer ${key}`
         }

@@ -67,7 +67,7 @@ export default function EventLog({ events }) {
   });
 
   return (
-    <div className="flex flex-col gap-2 md:gap-3 overflow-x-auto">
+    <div className="flex flex-col gap-2 md:gap-3 pb-2 h-full">
       {events.length === 0 ? (
         <motion.div 
           initial={{ opacity: 0 }}

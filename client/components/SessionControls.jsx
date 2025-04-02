@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { CloudLightning, CloudOff, MessageSquare, Send } from "react-feather";
 import Button from "./Button";
+import SessionSettings from "./SessionSettings";
 import { motion, AnimatePresence } from "framer-motion";
 
-function SessionStopped({ startSession, apiKey }) {
+function SessionStopped({ startSession, apiKey, sessionSettings, onSettingsChange }) {
   const [isActivating, setIsActivating] = useState(false);
   const isApiKeyEmpty = !apiKey || apiKey.trim() === "";
 
@@ -17,13 +18,18 @@ function SessionStopped({ startSession, apiKey }) {
   }
 
   return (
-    <div className="flex items-center justify-center w-full h-full">
+    <div className="flex flex-col items-center justify-center w-full h-full gap-4">
+      <div className="w-full max-w-sm">
+        <SessionSettings 
+          onSettingsChange={onSettingsChange}
+          initialSettings={sessionSettings}
+        />
+      </div>
+      
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.3 }}
-        whileHover={{ scale: isApiKeyEmpty ? 1 : 1.05 }}
-        whileTap={{ scale: isApiKeyEmpty ? 1 : 0.95 }}
+        transition={{ duration: 0.3, delay: 0.2 }}
         className="w-full max-w-sm"
       >
         <Button
@@ -56,11 +62,11 @@ function SessionActive({ stopSession, sendTextMessage }) {
   }
 
   return (
-    <div className="flex flex-col md:flex-row items-center justify-center w-full h-full gap-2 md:gap-4">
+    <div className="w-full">
       <form onSubmit={handleSubmit} className="flex items-center w-full gap-2 md:gap-4">
         <motion.input
-          initial={{ width: 0, opacity: 0 }}
-          animate={{ width: "auto", opacity: 1 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ duration: 0.3 }}
           onKeyDown={(e) => {
             if (e.key === "Enter" && message.trim()) {
@@ -73,39 +79,44 @@ function SessionActive({ stopSession, sendTextMessage }) {
           className="border border-gray-300 rounded-full p-2 md:p-4 text-sm md:text-base flex-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
+          autoFocus
         />
-        <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.3, delay: 0.1 }}
-          whileHover={{ scale: message.trim() ? 1.05 : 1 }}
-          whileTap={{ scale: message.trim() ? 0.95 : 1 }}
-        >
-          <Button
-            type="submit"
-            icon={<Send height={16} />}
-            className={`${message.trim() ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-400"} px-3 md:px-4 py-2 md:py-3`}
-            disabled={!message.trim()}
+
+        <div className="flex gap-2">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3, delay: 0.1 }}
+            whileHover={{ scale: message.trim() ? 1.05 : 1 }}
+            whileTap={{ scale: message.trim() ? 0.95 : 1 }}
           >
-            <span className="hidden sm:inline">发送</span>
-          </Button>
-        </motion.div>
+            <Button
+              type="submit"
+              icon={<Send height={16} />}
+              className={`${message.trim() ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-400"} px-3 md:px-4 py-2 md:py-3`}
+              disabled={!message.trim()}
+            >
+              <span className="hidden sm:inline">发送</span>
+            </Button>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3, delay: 0.2 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Button 
+              onClick={stopSession} 
+              icon={<CloudOff height={16} />}
+              className="bg-red-600 hover:bg-red-700 px-3 md:px-4 py-2 md:py-3"
+            >
+              <span className="hidden sm:inline">断开</span>
+            </Button>
+          </motion.div>
+        </div>
       </form>
-      <motion.div
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.3, delay: 0.2 }}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-      >
-        <Button 
-          onClick={stopSession} 
-          icon={<CloudOff height={16} />}
-          className="bg-red-600 hover:bg-red-700 px-3 md:px-4 py-2 md:py-3"
-        >
-          <span className="hidden sm:inline">断开连接</span>
-        </Button>
-      </motion.div>
     </div>
   );
 }
@@ -117,10 +128,12 @@ export default function SessionControls({
   sendTextMessage,
   serverEvents,
   isSessionActive,
-  apiKey
+  apiKey,
+  sessionSettings,
+  onSettingsChange
 }) {
   return (
-    <div className="flex gap-2 md:gap-4 border-t-2 border-gray-100 h-full rounded-md">
+    <div className="flex gap-2 h-full w-full">
       <AnimatePresence mode="wait">
         {isSessionActive ? (
           <motion.div
@@ -150,6 +163,8 @@ export default function SessionControls({
             <SessionStopped 
               startSession={startSession} 
               apiKey={apiKey}
+              sessionSettings={sessionSettings}
+              onSettingsChange={onSettingsChange}
             />
           </motion.div>
         )}
