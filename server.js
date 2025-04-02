@@ -29,7 +29,9 @@ const validateApiKey = (req, res, next) => {
 const vite = await createViteServer({
   server: { 
     middlewareMode: true,
-    hmr: false // 关闭热重载功能，避免ping 24678端口
+    hmr: {
+      "overlay": false,
+    }
   },
   appType: "custom",
 });
