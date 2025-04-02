@@ -12,6 +12,7 @@ export default {
       server:{
         hmr: false
       }
-    }
+    },
+    ws: false
   }
 };

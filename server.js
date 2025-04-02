@@ -29,11 +29,12 @@ const validateApiKey = (req, res, next) => {
 const vite = await createViteServer({
   server: { 
     middlewareMode: true,
-hmr: {
+    hmr: {
       server:{
         hmr: false
       }
-    }
+    },
+    ws: false
   },
   appType: "custom",
 });
