@@ -27,7 +27,10 @@ const validateApiKey = (req, res, next) => {
 
 // Configure Vite middleware for React client
 const vite = await createViteServer({
-  server: { middlewareMode: true },
+  server: { 
+    middlewareMode: true,
+    hmr: false // 关闭热重载功能，避免ping 24678端口
+  },
   appType: "custom",
 });
 app.use(vite.middlewares);
