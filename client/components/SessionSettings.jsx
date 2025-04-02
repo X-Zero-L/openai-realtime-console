@@ -13,7 +13,7 @@ const DEFAULT_PRESETS = [
 export default function SessionSettings({ onSettingsChange, initialSettings = {} }) {
   const [isOpen, setIsOpen] = useState(false);
   const [settings, setSettings] = useState({
-    voice: initialSettings.voice || "verse",
+    voice: initialSettings.voice || "shimmer",
     instructions: initialSettings.instructions || "",
     temperature: initialSettings.temperature || 0.8,
     ...initialSettings

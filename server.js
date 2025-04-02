@@ -47,7 +47,7 @@ app.post("/token", validateApiKey, async (req, res) => {
   try {
     // 从请求体获取会话设置
     const {
-      voice = "verse",
+      voice = "shimmer",
       temperature = 0.8,
       instructions = "",
       input_audio_format = "pcm16",
@@ -94,7 +94,7 @@ app.get("/token", validateApiKey, async (req, res) => {
         },
         body: JSON.stringify({
           model: "gpt-4o-realtime-preview-2024-12-17",
-          voice: "verse",
+          voice: "shimmer",
         }),
       },
     );
