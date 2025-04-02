@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import logo from "/assets/openai-logomark.svg";
 import EventLog from "./EventLog";
 import SessionControls from "./SessionControls";
-import ToolPanel from "./ToolPanel";
 import { motion } from "framer-motion";
 import Auth from "../pages/Auth";
 
@@ -234,7 +233,7 @@ export default function App() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="font-bold text-gray-800"
+              className="font-bold text-gray-800 text-sm md:text-base"
             >
               OpenAI 实时控制台
             </motion.h1>
@@ -245,7 +244,7 @@ export default function App() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.5 }}
             onClick={handleLogout}
-            className="px-4 py-1 text-sm text-gray-600 border border-gray-300 rounded-full hover:bg-gray-100 transition-colors"
+            className="px-3 py-1 text-xs md:text-sm text-gray-600 border border-gray-300 rounded-full hover:bg-gray-100 transition-colors"
           >
             退出登录
           </motion.button>
@@ -256,17 +255,17 @@ export default function App() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
-          className="absolute top-0 left-0 right-[380px] bottom-0 flex"
+          className="absolute top-0 left-0 right-0 bottom-0 flex"
         >
-          <section className="absolute top-0 left-0 right-0 bottom-32 px-4 py-4 overflow-y-auto">
+          <section className="absolute top-0 left-0 right-0 bottom-32 px-2 md:px-4 py-4 overflow-y-auto">
             <EventLog events={events} />
           </section>
-          <section className="absolute h-32 left-0 right-0 bottom-0 p-4 bg-white border-t border-gray-200 shadow-sm">
+          <section className="absolute h-32 left-0 right-0 bottom-0 p-2 md:p-4 bg-white border-t border-gray-200 shadow-sm">
             {authError && (
               <motion.div 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="text-red-500 text-sm mb-2 bg-red-50 p-2 rounded-md border border-red-200"
+                className="text-red-500 text-xs md:text-sm mb-2 bg-red-50 p-2 rounded-md border border-red-200"
               >
                 {authError}
               </motion.div>
@@ -281,19 +280,6 @@ export default function App() {
               apiKey={apiKey}
             />
           </section>
-        </motion.section>
-        <motion.section 
-          initial={{ x: 380 }}
-          animate={{ x: 0 }}
-          transition={{ duration: 0.5, type: "spring", stiffness: 100 }}
-          className="absolute top-0 w-[380px] right-0 bottom-0 p-4 pt-4 overflow-y-auto border-l border-gray-200 bg-white shadow-sm"
-        >
-          <ToolPanel
-            sendClientEvent={sendClientEvent}
-            sendTextMessage={sendTextMessage}
-            events={events}
-            isSessionActive={isSessionActive}
-          />
         </motion.section>
       </main>
     </>

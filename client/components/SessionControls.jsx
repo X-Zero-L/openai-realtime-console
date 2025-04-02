@@ -24,10 +24,11 @@ function SessionStopped({ startSession, apiKey }) {
         transition={{ duration: 0.3 }}
         whileHover={{ scale: isApiKeyEmpty ? 1 : 1.05 }}
         whileTap={{ scale: isApiKeyEmpty ? 1 : 0.95 }}
+        className="w-full max-w-sm"
       >
         <Button
           onClick={handleStartSession}
-          className={isActivating ? "bg-gray-600" : isApiKeyEmpty ? "bg-gray-400" : "bg-blue-600 hover:bg-blue-700"}
+          className={`w-full ${isActivating ? "bg-gray-600" : isApiKeyEmpty ? "bg-gray-400" : "bg-blue-600 hover:bg-blue-700"}`}
           icon={<CloudLightning height={16} />}
           disabled={isApiKeyEmpty}
           type="button"
@@ -55,8 +56,8 @@ function SessionActive({ stopSession, sendTextMessage }) {
   }
 
   return (
-    <div className="flex items-center justify-center w-full h-full gap-4">
-      <form onSubmit={handleSubmit} className="flex items-center w-full gap-4">
+    <div className="flex flex-col md:flex-row items-center justify-center w-full h-full gap-2 md:gap-4">
+      <form onSubmit={handleSubmit} className="flex items-center w-full gap-2 md:gap-4">
         <motion.input
           initial={{ width: 0, opacity: 0 }}
           animate={{ width: "auto", opacity: 1 }}
@@ -69,7 +70,7 @@ function SessionActive({ stopSession, sendTextMessage }) {
           }}
           type="text"
           placeholder="发送文本消息..."
-          className="border border-gray-300 rounded-full p-4 flex-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+          className="border border-gray-300 rounded-full p-2 md:p-4 text-sm md:text-base flex-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
         />
@@ -83,10 +84,10 @@ function SessionActive({ stopSession, sendTextMessage }) {
           <Button
             type="submit"
             icon={<Send height={16} />}
-            className={`${message.trim() ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-400"}`}
+            className={`${message.trim() ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-400"} px-3 md:px-4 py-2 md:py-3`}
             disabled={!message.trim()}
           >
-            发送
+            <span className="hidden sm:inline">发送</span>
           </Button>
         </motion.div>
       </form>
@@ -100,9 +101,9 @@ function SessionActive({ stopSession, sendTextMessage }) {
         <Button 
           onClick={stopSession} 
           icon={<CloudOff height={16} />}
-          className="bg-red-600 hover:bg-red-700"
+          className="bg-red-600 hover:bg-red-700 px-3 md:px-4 py-2 md:py-3"
         >
-          断开连接
+          <span className="hidden sm:inline">断开连接</span>
         </Button>
       </motion.div>
     </div>
@@ -119,7 +120,7 @@ export default function SessionControls({
   apiKey
 }) {
   return (
-    <div className="flex gap-4 border-t-2 border-gray-100 h-full rounded-md">
+    <div className="flex gap-2 md:gap-4 border-t-2 border-gray-100 h-full rounded-md">
       <AnimatePresence mode="wait">
         {isSessionActive ? (
           <motion.div
