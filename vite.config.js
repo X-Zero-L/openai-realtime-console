@@ -8,7 +8,10 @@ export default {
   root: join(dirname(path), "client"),
   plugins: [react()],
   server: {
-    hmr: false,
-    ws: false
+    hmr: {
+      server:{
+        hmr: false
+      }
+    }
   }
 };
