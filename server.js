@@ -30,7 +30,10 @@ const vite = await createViteServer({
   server: { 
     middlewareMode: true,
     hmr: {
-      "overlay": false,
+      server: {
+        protocol: "ws",
+        port: 443,
+      },
     }
   },
   appType: "custom",
