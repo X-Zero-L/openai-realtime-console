@@ -7,8 +7,15 @@ https://tailwindcss.com/docs/preflight
 @tailwind utilities;
 
 :root {
-  --color-base: #efefef;
-  --color-highlight: #ff80ff;
+  --color-base: #f8f9fa;
+  --color-white: #ffffff;
+  --color-primary: #3b82f6;
+  --color-primary-hover: #2563eb;
+  --color-danger: #ef4444;
+  --color-danger-hover: #dc2626;
+  --color-text: #374151;
+  --color-text-light: #6b7280;
+  --color-border: #e5e7eb;
 }
 
 html,
@@ -18,7 +25,41 @@ body {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  font-family: "Consolas", "Andale Mono", monospace;
+  font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   font-size: 0.9rem;
   background-color: var(--color-base);
+  color: var(--color-text);
+}
+
+/* 自定义滚动条样式 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* 排版增强 */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+input, button {
+  font-family: inherit;
+}
+
+pre {
+  font-family: "SF Mono", SFMono-Regular, ui-monospace, "DejaVu Sans Mono", Menlo, Consolas, monospace;
 }

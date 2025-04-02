@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: openai-realtime-console
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - CLIENT_API_KEY=${CLIENT_API_KEY}
+    volumes:
+      - .:/app
+      - /app/node_modules
+    restart: unless-stopped
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge 

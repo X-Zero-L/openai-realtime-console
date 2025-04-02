@@ -1,0 +1,27 @@
+# 版本控制系统
+.git
+.gitignore
+
+# 依赖目录
+node_modules
+npm-debug.log
+
+# 环境配置文件
+.env
+.env.*
+!.env.example
+
+# 文档和其他不需要的文件
+README.md
+LICENSE
+*.md
+
+# 开发工具配置
+.vscode
+.idea
+.DS_Store
+
+# Docker 相关文件
+Dockerfile
+docker-compose.yml
+.dockerignore 

@@ -6,6 +6,24 @@ import "dotenv/config";
 const app = express();
 const port = process.env.PORT || 3000;
 const apiKey = process.env.OPENAI_API_KEY;
+const clientApiKey = process.env.CLIENT_API_KEY || "test-api-key";
+
+// API密钥验证中间件
+const validateApiKey = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ error: "未提供有效的API密钥" });
+  }
+  
+  const providedApiKey = authHeader.split(' ')[1];
+  
+  if (providedApiKey !== clientApiKey) {
+    return res.status(403).json({ error: "API密钥无效" });
+  }
+  
+  next();
+};
 
 // Configure Vite middleware for React client
 const vite = await createViteServer({
@@ -15,7 +33,7 @@ const vite = await createViteServer({
 app.use(vite.middlewares);
 
 // API route for token generation
-app.get("/token", async (req, res) => {
+app.get("/token", validateApiKey, async (req, res) => {
   try {
     const response = await fetch(
       "https://api.openai.com/v1/realtime/sessions",
