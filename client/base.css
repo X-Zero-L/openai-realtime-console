@@ -16,6 +16,7 @@ https://tailwindcss.com/docs/preflight
   --color-text: #374151;
   --color-text-light: #6b7280;
   --color-border: #e5e7eb;
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 html,
@@ -62,4 +63,23 @@ input, button {
 
 pre {
   font-family: "SF Mono", SFMono-Regular, ui-monospace, "DejaVu Sans Mono", Menlo, Consolas, monospace;
+}
+
+/* 移动端适配增强 */
+@supports(padding: max(0px)) {
+  .pb-safe {
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+  }
+}
+
+/* 移动端视口调整 */
+@media (max-width: 640px) {
+  .min-h-0 {
+    min-height: 0;
+  }
+  
+  html, body {
+    height: stretch;
+    height: -webkit-fill-available;
+  }
 }

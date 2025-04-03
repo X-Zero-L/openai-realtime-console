@@ -18,7 +18,7 @@ function SessionStopped({ startSession, apiKey, sessionSettings, onSettingsChang
   }
 
   return (
-    <div className="flex flex-col items-center justify-center w-full h-full gap-4">
+    <div className="flex flex-col items-center justify-center w-full gap-4 pb-4 min-h-[120px]">
       <div className="w-full max-w-sm">
         <SessionSettings 
           onSettingsChange={onSettingsChange}
@@ -30,7 +30,7 @@ function SessionStopped({ startSession, apiKey, sessionSettings, onSettingsChang
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.3, delay: 0.2 }}
-        className="w-full max-w-sm"
+        className="w-full max-w-sm mt-2"
       >
         <Button
           onClick={handleStartSession}
@@ -133,7 +133,7 @@ export default function SessionControls({
   onSettingsChange
 }) {
   return (
-    <div className="flex gap-2 h-full w-full">
+    <div className="flex gap-2 w-full">
       <AnimatePresence mode="wait">
         {isSessionActive ? (
           <motion.div

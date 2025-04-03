@@ -183,7 +183,7 @@ export default function SessionSettings({ onSettingsChange, initialSettings = {}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(true)}
-        className="flex items-center justify-center gap-1 text-sm text-gray-700 border border-gray-300 rounded-full px-4 py-2 hover:bg-gray-100 transition-colors w-full max-w-sm mx-auto"
+        className="flex items-center justify-center gap-1 text-sm text-gray-700 border border-gray-300 rounded-full px-4 py-2 md:py-3 hover:bg-gray-100 transition-colors w-full max-w-sm mx-auto"
       >
         <Settings size={16} />
         <span>会话设置</span>
@@ -199,11 +199,11 @@ export default function SessionSettings({ onSettingsChange, initialSettings = {}
             onClick={handleOutsideClick}
           >
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
+              initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white rounded-lg shadow-xl w-full max-w-md p-5 relative max-h-[85vh] overflow-y-auto"
-              onClick={e => e.stopPropagation()}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="bg-white rounded-xl shadow-lg p-4 md:p-6 max-w-md w-full max-h-[90vh] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
             >
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold text-gray-800 flex items-center">
