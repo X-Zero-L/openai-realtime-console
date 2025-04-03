@@ -18,7 +18,7 @@ function SessionStopped({ startSession, apiKey, sessionSettings, onSettingsChang
   }
 
   return (
-    <div className="flex flex-col items-center justify-center w-full gap-4 pb-4 min-h-[120px]">
+    <div className="flex flex-col items-center justify-center w-full gap-4 pb-4 min-h-[120px] relative z-10">
       <div className="w-full max-w-sm">
         <SessionSettings 
           onSettingsChange={onSettingsChange}
@@ -34,7 +34,7 @@ function SessionStopped({ startSession, apiKey, sessionSettings, onSettingsChang
       >
         <Button
           onClick={handleStartSession}
-          className={`w-full ${isActivating ? "bg-gray-600" : isApiKeyEmpty ? "bg-gray-400" : "bg-blue-600 hover:bg-blue-700"}`}
+          className={`w-full ${isActivating ? "bg-gray-600" : isApiKeyEmpty ? "bg-gray-400" : "bg-blue-600 hover:bg-blue-700"} shadow-lg`}
           icon={<CloudLightning height={16} />}
           disabled={isApiKeyEmpty}
           type="button"

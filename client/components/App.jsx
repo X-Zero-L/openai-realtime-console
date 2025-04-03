@@ -284,7 +284,7 @@ export default function App() {
             <div className="flex-1 overflow-y-auto p-3 md:p-4 min-h-0">
               <EventLog events={events} />
             </div>
-            <div className="flex-shrink-0 border-t border-gray-200 p-3 md:p-4 pb-safe">
+            <div className="flex-shrink-0 border-t border-gray-200 p-3 md:p-4 pb-safe mb-12 sm:mb-0">
               <SessionControls
                 startSession={startSession}
                 stopSession={stopSession}
